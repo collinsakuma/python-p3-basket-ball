@@ -1,3 +1,5 @@
+import math
+
 def game_dict():
     return {
         "home": {
@@ -182,3 +184,57 @@ def game_dict():
             ]
         }
     }
+
+
+list_of_all_players = [player.get('name') for player in game_dict()['home']['players']] + [player.get('name') for player in game_dict()['away']['players']]
+
+list_of_players_dict = game_dict()['home']['players'] + game_dict()['away']['players']
+
+home_team = game_dict()['home']
+away_team = game_dict()['away']
+
+def num_points_per_game(player_name):
+    for player in list_of_players_dict:
+        if player['name'] == player_name:
+            return player['points_per_game']
+
+
+def player_age(player_name):
+    for player in list_of_players_dict:
+        if player['name'] == player_name:
+            return player['age']
+
+def team_colors(team_name):
+    if game_dict()['home']['team_name'] == team_name:
+        return game_dict()['home']['colors']
+    else:
+        return game_dict()['away']['colors']
+    
+def team_names():
+    return [game_dict()['home']['team_name'], game_dict()['away']['team_name']]
+
+def player_numbers(team_name):
+    if team_name == home_team['team_name']:
+        return [player['number'] for player in home_team['players']]
+    else:
+        return [player['number'] for player in away_team['players']]
+
+def player_stats(player_name):
+    for player in list_of_players_dict:
+        if player['name'] == player_name:
+            return player
+
+def shoe_brand_rebound():
+    shoe_rebound_dict = {}
+    for player in list_of_players_dict:
+        if player['shoe_brand'] in shoe_rebound_dict.keys():
+            for key in shoe_rebound_dict:
+                if key == player['shoe_brand']:
+                    shoe_rebound_dict[key].append(player['rebounds_per_game'])
+        else:
+            shoe_rebound_dict[f"{player['shoe_brand']}"] = [player['rebounds_per_game']]
+    return(shoe_rebound_dict)
+
+def average_rebounds_by_shoe_brand():
+    for brand in shoe_brand_rebound().items():
+            print(f"{brand[0]}:  {(sum(map(float, brand[1]))) / len(brand[1]):.2f}")
